@@ -7,14 +7,14 @@ namespace MoogleEngine
         {
             Files = documents ?? new List<Document>();
             Vocabulary = AllWords().ToList();
-            Matrix = new float[Files.Count(), Vocabulary.Count()];
+            Matrix = new double[Files.Count(), Vocabulary.Count()];
 
             CompleteMatrix();
         }
         public List<Document> Files { get; set; }
         public List<string> Vocabulary { get; set; }
 
-        public float[,] Matrix { get; set; }
+        public double[,] Matrix { get; set; }
         private void CompleteMatrix()
         {
             for (int i = 0; i < Files.Count; i++)

@@ -5,7 +5,7 @@ namespace MoogleEngine
     {
         public int MaxFrequency { set; get; }
         public Dictionary<string, int> FrequencyByWords { set; get; }
-        public Dictionary<string, float> WeightByWords { set; get; }
+        public Dictionary<string, double> WeightByWords { set; get; }
         public string FileName { set; get; }
         public string Content { set; get; }
         public Document(string router)
@@ -48,7 +48,7 @@ namespace MoogleEngine
 
            foreach (var key in FrequencyByWords.Keys)
            {
-               WeightByWords.Add(key,FrequencyByWords[key]/(float)MaxFrequency);
+               WeightByWords.Add(key,0.5+0.5*FrequencyByWords[key]/(double)MaxFrequency);
            }
         }
     }
