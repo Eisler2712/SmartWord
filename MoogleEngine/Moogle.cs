@@ -31,6 +31,7 @@ public static class Moogle
         }
         MyMatrix myMatrix = new MyMatrix(AllDocs);
         Vector myVector = new Vector(myMatrix.Vocabulary, queryDocument);
+        myVector.MultiplicateVector(myMatrix.CalcIdf);
         for (int i = 0; i < myMatrix.Matrix.GetLength(0); i++, System.Console.WriteLine())
         {
             for (int j = 0; j < myMatrix.Matrix.GetLength(1); j++)
@@ -42,9 +43,8 @@ public static class Moogle
         {
             Console.Write(myVector.Matrix[0, j] + " ");
         }
-        System.Console.WriteLine(Corrector.LevenshteinDistance("tigra", "tigre"));
         var searchItems = AllDocs
-                       .Select((d, i) => (d, Score(d, i, myMatrix, myVector)))
+                       .Select((d, i) => (d, Score( i, myMatrix, myVector)))
                        .Where(x => x.Item2 > 0)
                        .Select(t => new SearchItem(t.d.FileName, "", t.Item2))
                        .OrderByDescending(x => x.Score);
@@ -52,17 +52,20 @@ public static class Moogle
 
         return (searchItems.ToArray(), AllDocs);
     }
-    public static float Score(Document d, int documentIndex, MyMatrix myMatrix, Vector myVector)
+    public static float Score( int documentIndex, MyMatrix myMatrix, Vector myVector)
     {
-        float counter = 0;
-        for (int j = 0; j < myVector.Matrix.GetLength(1); j++)
-        {
-            if (myVector.Matrix[0, j] > 0 && myMatrix.Matrix[documentIndex, j] > 0)
+        float numerador=0;
+        float sumatoria1=0;
+        float sumatoria2=0; 
+        for (int j = 0; j < myMatrix.Matrix.GetLength(1); j++)
             {
-                counter += (float)myMatrix.Matrix[documentIndex, j];
+                numerador+=(float)myMatrix.Matrix[documentIndex,j]*(float)myVector.Matrix[0,j];
+                sumatoria1+=(float)myMatrix.Matrix[documentIndex,j]*(float)myMatrix.Matrix[documentIndex,j];
+                sumatoria2+=(float)myVector.Matrix[0,j]*(float)myVector.Matrix[0,j];
             }
-        }
-        return counter;
+
+        float denominador=sumatoria1*sumatoria2;
+        return numerador / denominador;
     }
 
 }

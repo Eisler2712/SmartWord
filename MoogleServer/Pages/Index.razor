@@ -34,12 +34,10 @@
     private int UrlCounter = 0;
     protected override void OnInitialized()
     {
-        System.Console.WriteLine($"OnInitialized {Text}");
         RunSuggestion();
     }
         protected override void OnParametersSet()
     {
-        System.Console.WriteLine($"OnParameterSet {Text}");
         RunSuggestion();
     }
     private void RunSuggestion()

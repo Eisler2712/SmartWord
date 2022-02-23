@@ -3,13 +3,18 @@ namespace MoogleEngine
 {
     public class QueryDocument
     {
+        public Dictionary<string,float> WeightByWords;
+        public int MaxFrequency{set;get;}
         public Dictionary<string, int> FrequencyByWords { set; get; }
         public string Content { set; get; }
         public QueryDocument(string query)
         {
+            WeightByWords= new();
             FrequencyByWords = new Dictionary<string, int>();
             Content = query;
             Tokenize();
+            SetMaxFrequency();
+            FillWeightByWord();
 
         }
         public void Tokenize()
@@ -32,6 +37,20 @@ namespace MoogleEngine
                     }
                 }
             }
+        }
+          private void SetMaxFrequency()
+        {
+            var values = FrequencyByWords.Values;
+            MaxFrequency = values.Max();
+        }
+         private void FillWeightByWord()
+        {
+
+           foreach (var key in FrequencyByWords.Keys)
+           {
+               float TF=FrequencyByWords[key]/MaxFrequency;
+               WeightByWords.Add(key,0.5f+0.5f*TF);
+           }
         }
     }
 }

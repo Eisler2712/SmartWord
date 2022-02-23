@@ -3,27 +3,35 @@ namespace MoogleEngine
     public class Vector
     {
         public List<string> Vocabulary{get;set;}
-        public int[,] Matrix{get;set;}
+        public float[,] Matrix{get;set;}
         public QueryDocument Query{get;set;}
 
         public Vector(List<string> list,QueryDocument query)
         {
             Vocabulary=list;
             Query=query;
-            Matrix = new int[1,Vocabulary.Count()];
-            CompleteMatrix();
+            Matrix = new float[1,Vocabulary.Count()];
+            CompleteVector();
 
         }
-         private void CompleteMatrix()
+         private void CompleteVector()
        { 
            
                for (int j = 0; j < Vocabulary.Count; j++)
                {
 
                    var word = Vocabulary[j];
-                   Matrix[0,j]= Query.FrequencyByWords.ContainsKey(word) ? Query.FrequencyByWords[word] : 0;
+                   Matrix[0,j]= Query.WeightByWords.ContainsKey(word) ? Query.WeightByWords[word] : 0;
                }
            
        }
+        public void MultiplicateVector(Dictionary<int,float>CalcIdf)
+        {
+                for (int j = 0; j < Matrix.GetLength(1); j++)
+                {
+                    Matrix[0,j]=Matrix[0,j]*CalcIdf[j];
+                }
+            
+        }
     }
 }
