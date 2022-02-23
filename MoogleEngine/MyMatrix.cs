@@ -57,7 +57,8 @@ namespace MoogleEngine
                    }
                    
                }
-               CalcIdf.Add(j,(float)Math.Log(Files.Count/counter));
+               //var idf=(float)Math.Log(Files.Count/counter);
+               CalcIdf.Add(j,1);
            }
         }
         private void MultiplicateMatrix()

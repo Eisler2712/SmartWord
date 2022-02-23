@@ -4,7 +4,7 @@ namespace MoogleEngine
     public class QueryDocument
     {
         public Dictionary<string,float> WeightByWords;
-        public int MaxFrequency{set;get;}
+        public float MaxFrequency{set;get;}
         public Dictionary<string, int> FrequencyByWords { set; get; }
         public string Content { set; get; }
         public QueryDocument(string query)
