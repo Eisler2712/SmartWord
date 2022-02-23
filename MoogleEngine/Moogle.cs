@@ -59,7 +59,7 @@ public static class Moogle
         {
             if (myVector.Matrix[0, j] > 0 && myMatrix.Matrix[documentIndex, j] > 0)
             {
-                counter += (float)myMatrix.Matrix[documentIndex, j] / d.MaxFrequency;
+                counter += (float)myMatrix.Matrix[documentIndex, j];
             }
         }
         return counter;

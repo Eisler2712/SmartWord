@@ -7,14 +7,14 @@ namespace MoogleEngine
         {
             Files = documents ?? new List<Document>();
             Vocabulary = AllWords().ToList();
-            Matrix = new int[Files.Count(), Vocabulary.Count()];
+            Matrix = new float[Files.Count(), Vocabulary.Count()];
 
             CompleteMatrix();
         }
         public List<Document> Files { get; set; }
         public List<string> Vocabulary { get; set; }
 
-        public int[,] Matrix { get; set; }
+        public float[,] Matrix { get; set; }
         private void CompleteMatrix()
         {
             for (int i = 0; i < Files.Count; i++)
@@ -23,7 +23,7 @@ namespace MoogleEngine
                 {
                     var document = Files[i];
                     var word = Vocabulary[j];
-                    Matrix[i, j] = document.FrequencyByWords.ContainsKey(word) ? document.FrequencyByWords[word] : 0;
+                    Matrix[i, j] = document.WeightByWords.ContainsKey(word) ? document.WeightByWords[word] : 0;
                 }
             }
         }

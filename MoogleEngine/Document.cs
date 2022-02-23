@@ -5,16 +5,19 @@ namespace MoogleEngine
     {
         public int MaxFrequency { set; get; }
         public Dictionary<string, int> FrequencyByWords { set; get; }
+        public Dictionary<string, float> WeightByWords { set; get; }
         public string FileName { set; get; }
         public string Content { set; get; }
         public Document(string router)
         {
-            FrequencyByWords = new Dictionary<string, int>();
+            WeightByWords= new ();
+            FrequencyByWords = new ();
             FileName = Path.GetFileName(router);
             FileName = FileName.Substring(0, FileName.Length - 4);
             Content = File.ReadAllText(router);
             Tokenize();
             SetMaxFrequency();
+            FillWeightByWord();
         }
         public void Tokenize()
         {
@@ -39,6 +42,14 @@ namespace MoogleEngine
         {
             var values = FrequencyByWords.Values;
             MaxFrequency = values.Max();
+        }
+        private void FillWeightByWord()
+        {
+
+           foreach (var key in FrequencyByWords.Keys)
+           {
+               WeightByWords.Add(key,FrequencyByWords[key]/(float)MaxFrequency);
+           }
         }
     }
 }

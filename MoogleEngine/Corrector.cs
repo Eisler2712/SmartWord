@@ -7,11 +7,9 @@ namespace MoogleEngine
             foreach (var word in vocabulary.Vocabulary)
             {
                 var x = LevenshteinDistance(query, word);
-                System.Console.WriteLine(x);
-                System.Console.WriteLine(word);
+
                 if (x <= query.Length / 2)
                 {
-                    System.Console.WriteLine(word);
                     return word;
                 }
             }
