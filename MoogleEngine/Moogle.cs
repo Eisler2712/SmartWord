@@ -31,7 +31,7 @@ public static class Moogle
         }
         MyMatrix myMatrix = new MyMatrix(AllDocs);
         Vector myVector = new Vector(myMatrix.Vocabulary, queryDocument);
-        myVector.MultiplicateVector(myMatrix.CalcIdf);
+        myVector.MultiplicateVector(myMatrix.count,myMatrix);
         for (int i = 0; i < myMatrix.Matrix.GetLength(0); i++, System.Console.WriteLine())
         {
             for (int j = 0; j < myMatrix.Matrix.GetLength(1); j++)

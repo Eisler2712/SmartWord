@@ -25,11 +25,11 @@ namespace MoogleEngine
                }
            
        }
-        public void MultiplicateVector(Dictionary<int,float>CalcIdf)
+        public void MultiplicateVector(float count,MyMatrix myMatrix)
         {
                 for (int j = 0; j < Matrix.GetLength(1); j++)
                 {
-                    Matrix[0,j]=Matrix[0,j]*CalcIdf[j];
+                    Matrix[0,j]=Matrix[0,j]*(float)Math.Log10(myMatrix.Files.Count/count);
                 }
             
         }

@@ -10,11 +10,11 @@ namespace MoogleEngine
             Matrix = new float[Files.Count(), Vocabulary.Count()];
 
             CompleteMatrix();
-            IDF();
+            
             MultiplicateMatrix();
 
         }
-        public Dictionary<int,float> CalcIdf = new();
+        public float count;
         public List<Document> Files { get; set; }
         public List<string> Vocabulary { get; set; }
 
@@ -43,23 +43,25 @@ namespace MoogleEngine
             }
             return allwords;
         }
-        private void IDF()
+        private float Counter(string word)
         {
             float counter=0;
-           for (int j = 0; j < Matrix.GetLength(1); j++)
+           for (int j = 0; j < Vocabulary.Count; j++)
            {
-               counter = 0;
-               for (int i = 0; i < Matrix.GetLength(0); i++)
+               if (Vocabulary[j]==word)
                {
-                   if (Matrix[i,j]>0)
-                   {
-                       counter++;
-                   }
-                   
+                     for (int i = 0; i < Matrix.GetLength(0); ++i)
+                    {
+                        if (Matrix[i,j]>0)
+                        {
+                            counter++;
+                        }
+                        
+                    }
                }
-               //var idf=(float)Math.Log(Files.Count/counter);
-               CalcIdf.Add(j,1);
-           }
+             
+            }
+            return counter;
         }
         private void MultiplicateMatrix()
         {
@@ -67,7 +69,8 @@ namespace MoogleEngine
             {
                 for (int j = 0; j < Matrix.GetLength(1); j++)
                 {
-                    Matrix[i,j]=Matrix[i,j]*CalcIdf[j];
+                    count= Counter(Vocabulary[j]);
+                    Matrix[i,j]=Matrix[i,j]*(float)Math.Log10(Files.Count/count);
                 }
             }
         }
