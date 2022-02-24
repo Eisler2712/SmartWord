@@ -2,18 +2,25 @@ namespace MoogleEngine
 {
     public static class Corrector
     {
-        public static string DevelopWord(string query, MyMatrix vocabulary)
+        public static string DevelopWord(QueryDocument querys, MyMatrix vocabulary)
         {
-            foreach (var word in vocabulary.Vocabulary)
+            string result = "";
+            
+            foreach (var query in querys.WeightByWords)
             {
-                var x = LevenshteinDistance(query, word);
-
-                if (x <= query.Length / 2)
+                System.Console.WriteLine(query);
+                foreach (var word in vocabulary.Vocabulary)
                 {
-                    return word;
+                    var x = LevenshteinDistance(query.Key, word);
+
+                    if (x <= query.Key.Length / 2)
+                    {
+                        result += " " + word;
+                    }
                 }
+
             }
-            return query;
+            return result;
         }
 
         public static int LevenshteinDistance(string queryWord, string documentWord)
@@ -39,6 +46,10 @@ namespace MoogleEngine
                     cost = (queryWord[i - 1] == documentWord[j - 1]) ? 0 : 1;
                     matrix[i, j] = Math.Min(Math.Min(matrix[i - 1, j] + 1, matrix[i, j - 1] + 1), matrix[i - 1, j - 1] + cost);
                 }
+            }
+            if (queryWord.Length>documentWord.Length)
+            {
+                
             }
             return matrix[queryWordLength, documentWordLength];
         }

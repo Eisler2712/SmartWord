@@ -12,13 +12,14 @@ public static class Moogle
     {
         SearchItem[] items;
         List<Document> AllDocs;
+        QueryDocument words;
         string root = @"../Content/";
-        (items, AllDocs) = SearchingFolders(root, query);
+        (items, AllDocs,words) = SearchingFolders(root, query);
 
         MyMatrix myMatrix = new MyMatrix(AllDocs);
-        return new SearchResult(items, Corrector.DevelopWord(query, myMatrix));
+        return new SearchResult(items, Corrector.DevelopWord(words, myMatrix));
     }
-    private static (SearchItem[], List<Document>) SearchingFolders(string router, string query)
+    private static (SearchItem[], List<Document>, QueryDocument) SearchingFolders(string router, string query)
     {
         QueryDocument queryDocument = new QueryDocument(query);
         List<Document> AllDocs = new List<Document>();
@@ -29,9 +30,10 @@ public static class Moogle
             Document Doc = new Document(filepath);
             AllDocs.Add(Doc);
         }
+        System.Console.WriteLine("ESOOOOOOOOOO+ "+Corrector.LevenshteinDistance("halo","hola"));
         MyMatrix myMatrix = new MyMatrix(AllDocs);
         Vector myVector = new Vector(myMatrix.Vocabulary, queryDocument);
-        myVector.MultiplicateVector(myMatrix.count,myMatrix);
+        myVector.MultiplicateVector(myMatrix.count, myMatrix);
         for (int i = 0; i < myMatrix.Matrix.GetLength(0); i++, System.Console.WriteLine())
         {
             for (int j = 0; j < myMatrix.Matrix.GetLength(1); j++)
@@ -44,27 +46,27 @@ public static class Moogle
             Console.Write(myVector.Matrix[0, j] + " ");
         }
         var searchItems = AllDocs
-                       .Select((d, i) => (d, Score( i, myMatrix, myVector)))
+                       .Select((d, i) => (d, Score(i, myMatrix, myVector)))
                        .Where(x => x.Item2 > 0)
                        .Select(t => new SearchItem(t.d.FileName, "", t.Item2))
                        .OrderByDescending(x => x.Score);
 
 
-        return (searchItems.ToArray(), AllDocs);
+        return (searchItems.ToArray(), AllDocs, queryDocument);
     }
-    public static float Score( int documentIndex, MyMatrix myMatrix, Vector myVector)
+    public static float Score(int documentIndex, MyMatrix myMatrix, Vector myVector)
     {
-        float numerador=0;
-        float sumatoria1=0;
-        float sumatoria2=0; 
+        float numerador = 0;
+        float sumatoria1 = 0;
+        float sumatoria2 = 0;
         for (int j = 0; j < myMatrix.Matrix.GetLength(1); j++)
-            {
-                numerador+=(float)myMatrix.Matrix[documentIndex,j]*(float)myVector.Matrix[0,j];
-                sumatoria1+=(float)myMatrix.Matrix[documentIndex,j]*(float)myMatrix.Matrix[documentIndex,j];
-                sumatoria2+=(float)myVector.Matrix[0,j]*(float)myVector.Matrix[0,j];
-            }
+        {
+            numerador += (float)myMatrix.Matrix[documentIndex, j] * (float)myVector.Matrix[0, j];
+            sumatoria1 += (float)myMatrix.Matrix[documentIndex, j] * (float)myMatrix.Matrix[documentIndex, j];
+            sumatoria2 += (float)myVector.Matrix[0, j] * (float)myVector.Matrix[0, j];
+        }
 
-        float denominador=sumatoria1*sumatoria2;
+        float denominador = sumatoria1 * sumatoria2;
         return numerador / denominador;
     }
 
