@@ -52,7 +52,11 @@
 
     private void RunQuery()
     {
-        result = Moogle.Query(query);
+        if (!string.IsNullOrEmpty(query))
+        {
+            result = Moogle.Query(query);
+        }
+        
     }
 
 

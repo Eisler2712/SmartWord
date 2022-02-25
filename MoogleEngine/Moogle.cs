@@ -48,7 +48,7 @@ public static class Moogle
         var searchItems = AllDocs
                        .Select((d, i) => (d, Score(i, myMatrix, myVector)))
                        .Where(x => x.Item2 > 0)
-                       .Select(t => new SearchItem(t.d.FileName, "", t.Item2))
+                       .Select(t => new SearchItem(t.d.FileName, "..."/*$"{t.d.Content.Remove(50)}"*/, t.Item2))
                        .OrderByDescending(x => x.Score);
 
 
