@@ -10,8 +10,8 @@ namespace MoogleEngine
         public string Content { set; get; }
         public Document(string router)
         {
-            WeightByWords= new ();
-            FrequencyByWords = new ();
+            WeightByWords = new();
+            FrequencyByWords = new();
             FileName = Path.GetFileName(router);
             FileName = FileName.Substring(0, FileName.Length - 4);
             Content = File.ReadAllText(router);
@@ -46,10 +46,21 @@ namespace MoogleEngine
         private void FillWeightByWord()
         {
 
-           foreach (var key in FrequencyByWords.Keys)
-           {
-               WeightByWords.Add(key,FrequencyByWords[key]/MaxFrequency);
-           }
+            foreach (var key in FrequencyByWords.Keys)
+            {
+                WeightByWords.Add(key, FrequencyByWords[key] / MaxFrequency);
+            }
+        }
+        public string Snippet(string document)
+        {
+            int i = 0;
+            string snippet = "";
+            while (i < 200 && i < document.Length)
+            {
+                snippet += document[i];
+                i++;
+            }
+            return snippet;
         }
     }
 }
