@@ -62,11 +62,11 @@ public static class Moogle
         for (int j = 0; j < myMatrix.Matrix.GetLength(1); j++)
         {
             numerador += (float)myMatrix.Matrix[documentIndex, j] * (float)myVector.Matrix[0, j];
-            sumatoria1 += (float)Math.Sqrt((float)myMatrix.Matrix[documentIndex, j] * (float)myMatrix.Matrix[documentIndex, j]);
-            sumatoria2 += (float)Math.Sqrt((float)myVector.Matrix[0, j] * (float)myVector.Matrix[0, j]);
+            sumatoria1 += (float)myMatrix.Matrix[documentIndex, j] * (float)myMatrix.Matrix[documentIndex, j];
+            sumatoria2 += (float)myVector.Matrix[0, j] * (float)myVector.Matrix[0, j];
         }
 
-        float denominador = sumatoria1 * sumatoria2;
+        float denominador = (float)(Math.Sqrt(sumatoria1) * Math.Sqrt(sumatoria2));
         return numerador / denominador;
     }
 

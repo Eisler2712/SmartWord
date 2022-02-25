@@ -48,7 +48,7 @@ namespace MoogleEngine
 
            foreach (var key in FrequencyByWords.Keys)
            {
-               WeightByWords.Add(key,0.5f+0.5f*FrequencyByWords[key]/MaxFrequency);
+               WeightByWords.Add(key,FrequencyByWords[key]/MaxFrequency);
            }
         }
     }
