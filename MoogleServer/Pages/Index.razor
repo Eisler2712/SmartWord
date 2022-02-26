@@ -1,10 +1,10 @@
 ﻿@page "/{text?}"
 
-<PageTitle>Moogle!</PageTitle>
+<PageTitle>SmartWord!</PageTitle>
 
-<h1 id="start">🔍 Moogle!</h1>
+<h1 id="start">🔍 SmartWord!</h1>
 
-<input class="p-1 my-4" @bind="query" placeholder="Introduzca su búsqueda">
+<input class="p-1 my-4" @bind="query" @onkeyup="RunQuery" placeholder="Introduzca su búsqueda">
 
 <button type="default" class="btn btn-primary" @onclick="RunQuery">🔍 Buscar</button>
 
@@ -16,6 +16,15 @@
 }
 
 <ul class="results">
+    @if(result.Items().Count()==0 && query!="" )
+{
+    <li class="item" >
+        <div >
+            <p class="title">Sorry!</p>
+            <p>Document not found</p>
+        </div>
+    </li>
+}
     @foreach (var item in result.Items())
     {
         <li>
@@ -34,7 +43,10 @@
     private int UrlCounter = 0;
     protected override void OnInitialized()
     {
-        RunSuggestion();
+        if (!string.IsNullOrEmpty(Text))
+        {
+            RunSuggestion();
+        }
     }
         protected override void OnParametersSet()
     {
