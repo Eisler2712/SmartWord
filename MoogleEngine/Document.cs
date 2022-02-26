@@ -21,11 +21,11 @@ namespace MoogleEngine
         }
         public void Tokenize()
         {
-            string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").Replace(".", " ").Replace(";", " ").Replace("!", " ");
+            string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").Replace(".", " ").Replace(";", " ").Replace("!", " ").Replace("'"," ").Replace("`"," ").Replace("“",(" ").Replace("”"," ").Replace("\""," "));
             var words = newContent.ToLower().Split(" ").Where(s => !string.IsNullOrEmpty(s));
             foreach (var word in words)
             {
-                if (!conjuciones.Contains(word) && !preposiciones.Contains(word))
+                if (!conjuciones.Contains(word) && !preposiciones.Contains(word) && !pronombres.Contains(word))
                 {
                     if (FrequencyByWords.ContainsKey(word))
                     {

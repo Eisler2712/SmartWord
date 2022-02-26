@@ -8,12 +8,13 @@ namespace MoogleEngine
             
             foreach (var query in querys.WeightByWords)
             {
-                System.Console.WriteLine(query);
                 foreach (var word in vocabulary.Vocabulary)
                 {
                     var x = LevenshteinDistance(query.Key, word);
-
-                    if (x <= query.Key.Length / 2)
+                    if(query.Key == word)
+                    {
+                        result=query.Key;
+                    }else  if (x <= query.Key.Length / 4)
                     {
                         result += " " + word;
                     }

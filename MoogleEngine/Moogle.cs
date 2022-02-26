@@ -30,21 +30,9 @@ public static class Moogle
             Document Doc = new Document(filepath);
             AllDocs.Add(Doc);
         }
-        System.Console.WriteLine("ESOOOOOOOOOO+ "+Corrector.LevenshteinDistance("halo","hola"));
         MyMatrix myMatrix = new MyMatrix(AllDocs);
         Vector myVector = new Vector(myMatrix.Vocabulary, queryDocument);
         myVector.MultiplicateVector(myMatrix.count, myMatrix);
-        for (int i = 0; i < myMatrix.Matrix.GetLength(0); i++, System.Console.WriteLine())
-        {
-            for (int j = 0; j < myMatrix.Matrix.GetLength(1); j++)
-            {
-                System.Console.Write(myMatrix.Matrix[i, j] + " ");
-            }
-        }
-        for (int j = 0; j < myVector.Matrix.GetLength(1); j++)
-        {
-            Console.Write(myVector.Matrix[0, j] + " ");
-        }
         var searchItems = AllDocs
                        .Select((d, i) => (d, Score(i, myMatrix, myVector)))
                        .Where(x => x.Item2 > 0)
