@@ -11,12 +11,10 @@ namespace MoogleEngine
                 foreach (var word in vocabulary.Vocabulary)
                 {
                     var x = LevenshteinDistance(query.Key, word);
-                    if(query.Key == word)
-                    {
-                        result=query.Key;
-                    }else  if (x <= query.Key.Length / 4)
+                    if (x <= query.Key.Length / 4 && x > 0)
                     {
                         result += " " + word;
+                        break;
                     }
                 }
 

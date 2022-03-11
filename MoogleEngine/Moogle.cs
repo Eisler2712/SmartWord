@@ -7,32 +7,74 @@ namespace MoogleEngine;
 
 public static class Moogle
 {
+    public static SearchItem[] items = null;
+    public static List<Document> AllDocs = null;
+    public static QueryDocument words = null;
+    public static MyMatrix myMatrix = null;
+
+    public static Dictionary<string, int> CounterData;
 
     public static SearchResult Query(string query)
     {
-        SearchItem[] items;
-        List<Document> AllDocs;
-        QueryDocument words;
         string root = @"../Content/";
-        (items, AllDocs,words) = SearchingFolders(root, query);
 
-        MyMatrix myMatrix = new MyMatrix(AllDocs);
+        (items, AllDocs, words, myMatrix) = SearchingFolders(root, query);
+        //MyMatrix myMatrix = new MyMatrix(AllDocs);
+
         return new SearchResult(items, Corrector.DevelopWord(words, myMatrix));
     }
-    private static (SearchItem[], List<Document>, QueryDocument) SearchingFolders(string router, string query)
+
+    public static void HandleDocs(string router)
     {
-        QueryDocument queryDocument = new QueryDocument(query);
-        List<Document> AllDocs = new List<Document>();
+        CounterData = new Dictionary<string, int>();
+
+        AllDocs = new List<Document>();
         List<string> files = Directory.GetFiles(router).ToList();
         files.Remove("../Content/.gitignore");
         foreach (var filepath in files)
         {
             Document Doc = new Document(filepath);
             AllDocs.Add(Doc);
+
+            System.Console.WriteLine($"Process doc {filepath}");
         }
-        MyMatrix myMatrix = new MyMatrix(AllDocs);
-        Vector myVector = new Vector(myMatrix.Vocabulary, queryDocument);
-        myVector.MultiplicateVector(myMatrix.count, myMatrix);
+
+
+        System.Console.WriteLine("Complete all docs");
+    }
+
+
+    private static (SearchItem[], List<Document>, QueryDocument, MyMatrix) SearchingFolders(string router, string query)
+    {
+
+        if (AllDocs == null)
+            HandleDocs(router);
+
+        //QueryDocument queryDocument = new QueryDocument(query);
+        // List<Document> AllDocs = new List<Document>();
+
+        // List<string> files = Directory.GetFiles(router).ToList();
+        //files.Remove("../Content/.gitignore");
+        /* foreach (var filepath in files)
+         {
+             Document Doc = new Document(filepath);
+             AllDocs.Add(Doc);
+
+             System.Console.WriteLine($"Process doc {filepath}");
+         }*/
+
+
+        if (myMatrix == null)
+        {
+            myMatrix = new MyMatrix(AllDocs);
+            System.Console.WriteLine("Complete myMatrix");
+        }
+
+        var (queryDoc, myVector) = HandlerQuery(query);
+
+        //Vector myVector = new Vector(myMatrix.Vocabulary, queryDocument);
+        //myVector.MultiplicateVector(myMatrix.count, myMatrix);
+
         var searchItems = AllDocs
                        .Select((d, i) => (d, Score(i, myMatrix, myVector)))
                        .Where(x => x.Item2 > 0)
@@ -40,8 +82,20 @@ public static class Moogle
                        .OrderByDescending(x => x.Score);
 
 
-        return (searchItems.ToArray(), AllDocs, queryDocument);
+        return (searchItems.ToArray(), AllDocs, queryDoc, myMatrix);
     }
+
+    public static (QueryDocument, Vector) HandlerQuery(string query)
+    {
+        QueryDocument queryDocument = new QueryDocument(query);
+        Vector myVector = new Vector(myMatrix.Vocabulary, queryDocument);
+        myVector.MultiplicateVector(myMatrix.count, myMatrix);
+
+        System.Console.WriteLine("Complete handler query");
+
+        return (queryDocument, myVector);
+    }
+
     public static float Score(int documentIndex, MyMatrix myMatrix, Vector myVector)
     {
         float numerador = 0;

@@ -21,8 +21,11 @@ namespace MoogleEngine
         }
         public void Tokenize()
         {
-            string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").Replace(".", " ").Replace(";", " ").Replace("!", " ").Replace("'"," ").Replace("`"," ").Replace("“",(" ").Replace("”"," ").Replace("\""," "));
+            string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").Replace(".", " ").Replace(";", " ").Replace("!", " ").Replace("'", " ").Replace("`", " ").Replace("“", (" ").Replace("”", " ").Replace("\"", " "));
             var words = newContent.ToLower().Split(" ").Where(s => !string.IsNullOrEmpty(s));
+
+            Dictionary<string, bool> @checked = new Dictionary<string, bool>();
+
             foreach (var word in words)
             {
                 if (!conjuciones.Contains(word) && !preposiciones.Contains(word) && !pronombres.Contains(word))
@@ -35,7 +38,18 @@ namespace MoogleEngine
                     {
                         FrequencyByWords.Add(word, 1);
                     }
+
+                    if (!Moogle.CounterData.ContainsKey(word)) Moogle.CounterData.Add(word, 1);
+                    else
+                    {
+                        Moogle.CounterData[word] += (@checked.ContainsKey(word) ? 0 : 1);
+
+                        if (!@checked.ContainsKey(word))
+                            @checked.Add(word, true);
+                    }
+
                 }
+
             }
         }
         private void SetMaxFrequency()
