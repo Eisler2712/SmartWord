@@ -16,27 +16,33 @@
 }
 
 <ul class="results">
-    @if(result.Items().Count()==0 && query!="" )
-{
-    <li class="item" >
-        <div >
-            <p class="title">Sorry!</p>
-            <p>Document not found</p>
-        </div>
-    </li>
-}
+    @if(isProcess)
+    {
+       @if(result.Items().Count()==0 && query!="")
+        {
+            <li class="item" >
+                <div >
+                    <p class="title">Sorry!</p>
+                    <p>Document not found</p>
+                </div>
+            </li>
+        }
+    }
+    
     @foreach (var item in result.Items())
     {
         <li>
             <div class="item">
                 <p class="title">@item.Title</p>
                 <p>... @item.Snippet ...</p>
+                <p>...@item.Score...</p>
             </div>
         </li>
     }
 </ul>
 
 @code {
+    private bool isProcess= false;
     private SearchResult result = new SearchResult();
     [Parameter] public string? Text { get; set; }
     private string query = "";
@@ -66,9 +72,10 @@
     {
         if (!string.IsNullOrEmpty(query))
         {
+            isProcess=true;
             result = Moogle.Query(query);
+            
         }
-        
     }
 
 

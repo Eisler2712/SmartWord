@@ -12,7 +12,7 @@ namespace MoogleEngine
 
             CompleteMatrix();
             Console.WriteLine();
-            //MultiplicateMatrix();
+            
 
         }
         public float count;
@@ -34,19 +34,11 @@ namespace MoogleEngine
                     var word = Vocabulary[j];
                     Matrix[i, j] = document.WeightByWords.ContainsKey(word) ? document.WeightByWords[word] : 0;
 
-
-                   //count= CounterData.ContainsKey(Vocabulary[j]) ? : CounterData[Vocabulary[]] Counter(Vocabulary[j], Files);
-
-                    // if(!CounterData.ContainsKey(Vocabulary[j]))
-                    //      CounterData[Vocabulary[j]] = Counter(Vocabulary[j], Files);
-                    
-                    // int count = CounterData[Vocabulary[j]];
                       
                     count = Moogle.CounterData[word];
                 
                     Matrix[i,j]=Matrix[i,j]*(float)Math.Log(Files.Count/count);
 
-                    //System.Console.WriteLine(j);
                 }
             System.Console.WriteLine($"End for index{i}");    
             }
@@ -73,33 +65,9 @@ namespace MoogleEngine
                 if(doc.FrequencyByWords.ContainsKey(word))
                     counter++;
             }
-          /* for (int j = 0; j < Vocabulary.Count; j++)
-           {
-               if (Vocabulary[j]==word)
-               {
-                     for (int i = 0; i < Matrix.GetLength(0); ++i)
-                    {
-                        if (Matrix[i,j]>0)
-                        {
-                            counter++;
-                        }
-                        
-                    }
-               }
-             
-            }*/
+        
             return counter;
         }
-       /* private void MultiplicateMatrix()
-        {
-            for (int i = 0; i < Matrix.GetLength(0); i++)
-            {
-                for (int j = 0; j < Matrix.GetLength(1); j++)
-                {
-                    count= Counter(Vocabulary[j]);
-                    Matrix[i,j]=Matrix[i,j]*(float)Math.Log10(Files.Count/count);
-                }
-            }
-        }*/
+     
     }
 }

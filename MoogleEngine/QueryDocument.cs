@@ -31,7 +31,7 @@ namespace MoogleEngine
         {
             string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").Replace(".", " ")
             .Replace(";", " ").Replace(">", " ").Replace("<", " ").Replace("?", " ")
-            .Replace("¿", " ").Replace("¡", " ").Replace("/", " ").Replace("\""," ");
+            .Replace("¿", " ").Replace("¡", " ").Replace("/", " ").Replace("\""," ").Replace("_"," ");
             var tempwords = newContent.ToLower().Split(" ").Where(s => !string.IsNullOrEmpty(s));
             List<string> words = new List<string>();
             foreach (var temp in tempwords)
