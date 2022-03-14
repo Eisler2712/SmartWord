@@ -50,19 +50,6 @@ public static class Moogle
         if (AllDocs == null)
             HandleDocs(router);
 
-        //QueryDocument queryDocument = new QueryDocument(query);
-        // List<Document> AllDocs = new List<Document>();
-
-        // List<string> files = Directory.GetFiles(router).ToList();
-        //files.Remove("../Content/.gitignore");
-        /* foreach (var filepath in files)
-         {
-             Document Doc = new Document(filepath);
-             AllDocs.Add(Doc);
-
-             System.Console.WriteLine($"Process doc {filepath}");
-         }*/
-
 
         if (myMatrix == null)
         {
@@ -72,11 +59,8 @@ public static class Moogle
 
         var (queryDoc, myVector) = HandlerQuery(query);
 
-        //Vector myVector = new Vector(myMatrix.Vocabulary, queryDocument);
-        //myVector.MultiplicateVector(myMatrix.count, myMatrix);
-
         var searchItems = AllDocs
-                       .Select((d, i) => (d, Score(i, myMatrix, myVector)))
+                       .Select((d, i) => (d, Score(d,i, myMatrix, myVector)))
                        .Where(x => x.Item2 > 0)
                        .Select(t => new SearchItem(t.d.FileName, t.d.Snippet(t.d.Content), t.Item2))
                        .OrderByDescending(x => x.Score);
@@ -96,20 +80,38 @@ public static class Moogle
         return (queryDocument, myVector);
     }
 
-    public static float Score(int documentIndex, MyMatrix myMatrix, Vector myVector)
+    public static float Score(Document d,int documentIndex, MyMatrix myMatrix, Vector myVector)
     {
+        int operatorsValue = 1;
         float numerador = 0;
         float sumatoria1 = 0;
         float sumatoria2 = 0;
         for (int j = 0; j < myMatrix.Matrix.GetLength(1); j++)
         {
+            if(QueryDocument.Operators["*"].Contains(myMatrix.Vocabulary[j]) && myMatrix.Matrix[documentIndex, j] !=  0 ){
+                myVector.Matrix[0, j] += (float)myVector.Matrix[0, j] * QueryDocument.Relevance[myMatrix.Vocabulary[j]];
+            }
+            if(QueryDocument.Operators["!"].Contains(myMatrix.Vocabulary[j]) && myMatrix.Matrix[documentIndex, j] !=  0 ){
+                operatorsValue = -1;
+            }
+            if(QueryDocument.Operators["^"].Contains(myMatrix.Vocabulary[j]) && myMatrix.Matrix[documentIndex, j] ==  0 ){
+                operatorsValue = -1;
+            }
+
             numerador += (float)myMatrix.Matrix[documentIndex, j] * (float)myVector.Matrix[0, j];
             sumatoria1 += (float)myMatrix.Matrix[documentIndex, j] * (float)myMatrix.Matrix[documentIndex, j];
             sumatoria2 += (float)myVector.Matrix[0, j] * (float)myVector.Matrix[0, j];
         }
-
+        for (int i = 0; i < QueryDocument.Operators["^"].Count(); i++)
+        {
+            if (!d.FrequencyByWords.Keys.Contains(QueryDocument.Operators["^"][i]))
+            {
+                operatorsValue=-1;
+            }
+        }
+        
         float denominador = (float)(Math.Sqrt(sumatoria1) * Math.Sqrt(sumatoria2));
-        return numerador / denominador;
+        return numerador / denominador * operatorsValue;
     }
 
 }

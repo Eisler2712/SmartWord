@@ -3,8 +3,8 @@ namespace MoogleEngine
 {
     public class QueryDocument
     {
-        public Dictionary<string,List<string>> Operators;
-        public Dictionary<string,int> Relevance;
+        public static Dictionary<string,List<string>> Operators;
+        public static Dictionary<string,int> Relevance;
         public Dictionary<string,float> WeightByWords;
         public float MaxFrequency{set;get;}
         public Dictionary<string, float> FrequencyByWords { set; get; }
@@ -29,47 +29,36 @@ namespace MoogleEngine
         }
         public void Tokenize()
         {
-            int counterRelevance=0;
             string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").Replace(".", " ")
-            .Replace(";", " ").Replace("!", " ").Replace(">", " ").Replace("<", " ").Replace("?", " ")
-            .Replace("¿", " ").Replace("¡", " ").Replace("*", " ").Replace("/", " ");
+            .Replace(";", " ").Replace(">", " ").Replace("<", " ").Replace("?", " ")
+            .Replace("¿", " ").Replace("¡", " ").Replace("/", " ").Replace("\""," ");
             var tempwords = newContent.ToLower().Split(" ").Where(s => !string.IsNullOrEmpty(s));
             List<string> words = new List<string>();
             foreach (var temp in tempwords)
             {
+                string temp2 = temp;
                 if (temp[0]=='^')
                 {
-                    Operators["^"].Add(temp.Replace("^"," "));
+                    temp2 = temp.Remove(0,1);
+                    Operators["^"].Add(temp2);
                 }
                   if (temp[0]=='!')
                 {
-                    Operators["!"].Add(temp.Replace("!"," "));
+                    temp2 = temp.Remove(0,1);
+                    Operators["!"].Add(temp2);
                 }
-                  if (temp[0]=='`')
+                  if (temp[0]=='~')
                 {
-                    Operators["`"].Add(temp.Replace("`"," "));
+                    temp2 = temp.Remove(0,1);
+                    Operators["~"].Add(temp2);
                 }
                 if (temp[0]=='*')
                 {
-                    for (int i = 0; i < temp.Length; i++)
-                    {
-                        if (temp[i]=='*')
-                        {
-                            counterRelevance++;
-                        }else
-                        {
-                            Operators["*"].Add(temp.Remove(0,i));
-                        }
-                    }
-                    Relevance.Add(temp,counterRelevance);
+                   temp2= CountRelevant(temp);
                 }
-           
+              words.Add(temp2);
             }
-            foreach (var tempWord in tempwords)
-            {
-                var word= tempWord.Replace("*"," ");
-                words.Add(word);
-            }
+          
             foreach (var word in words)
             {
                 if (!conjuciones.Contains(word) && !preposiciones.Contains(word))
@@ -84,6 +73,18 @@ namespace MoogleEngine
                     }
                 }
             }
+        }
+          public string CountRelevant(string word)
+        {
+            int counterRelevance=0;
+            while(word[0]=='*')
+            {
+                counterRelevance+=1;
+                word=word.Remove(0,1);
+            }
+            Relevance.Add(word,counterRelevance);
+            Operators["*"].Add(word);
+            return word;
         }
           private void SetMaxFrequency()
         {

@@ -44,7 +44,7 @@ namespace MoogleEngine
                       
                     count = Moogle.CounterData[word];
                 
-                    Matrix[i,j]=Matrix[i,j]*(float)Math.Log10(Files.Count);
+                    Matrix[i,j]=Matrix[i,j]*(float)Math.Log(Files.Count/count);
 
                     //System.Console.WriteLine(j);
                 }
