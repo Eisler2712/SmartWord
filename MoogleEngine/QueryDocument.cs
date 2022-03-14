@@ -27,14 +27,14 @@ namespace MoogleEngine
             FillWeightByWord();
 
         }
-        public void Tokenize()
+        public void Tokenize()// Obtener todas las palabras por separado de la query
         {
             string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").Replace(".", " ")
             .Replace(";", " ").Replace(">", " ").Replace("<", " ").Replace("?", " ")
             .Replace("¿", " ").Replace("¡", " ").Replace("/", " ").Replace("\""," ").Replace("_"," ");
             var tempwords = newContent.ToLower().Split(" ").Where(s => !string.IsNullOrEmpty(s));
             List<string> words = new List<string>();
-            foreach (var temp in tempwords)
+            foreach (var temp in tempwords)// Extaryendo todas las palabras por operador
             {
                 string temp2 = temp;
                 if (temp[0]=='^')
@@ -59,7 +59,7 @@ namespace MoogleEngine
               words.Add(temp2);
             }
           
-            foreach (var word in words)
+            foreach (var word in words)//Obtener la frecuencia de las palabras en el documento
             {
                 if (!conjuciones.Contains(word) && !preposiciones.Contains(word))
                 {
@@ -74,7 +74,7 @@ namespace MoogleEngine
                 }
             }
         }
-          public string CountRelevant(string word)
+          public string CountRelevant(string word)// guardar la palabra sin el operador * delante
         {
             int counterRelevance=0;
             while(word[0]=='*')
@@ -86,12 +86,12 @@ namespace MoogleEngine
             Operators["*"].Add(word);
             return word;
         }
-          private void SetMaxFrequency()
+          private void SetMaxFrequency()// Obtener la mayor frecuencia del documento
         {
             var values = FrequencyByWords.Values;
             MaxFrequency = values.Max();
         }
-         private void FillWeightByWord()
+         private void FillWeightByWord()//Guardando todo los pesos de cada palabra de la query
         {
 
            foreach (var key in FrequencyByWords.Keys)

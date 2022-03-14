@@ -2,7 +2,7 @@ namespace MoogleEngine
 {
     public static class Corrector
     {
-        public static string DevelopWord(QueryDocument querys, MyMatrix vocabulary)
+        public static string DevelopWord(QueryDocument querys, MyMatrix vocabulary)// Extraer la palabra mas similar a cada palabra de la query
         {
             string result = "";
             
@@ -15,6 +15,10 @@ namespace MoogleEngine
                     {
                         result += " " + word;
                         break;
+                    }else if (x==0)
+                    {
+                        result.Remove(0);
+                        break;
                     }
                 }
 
@@ -22,7 +26,7 @@ namespace MoogleEngine
             return result;
         }
 
-        public static int LevenshteinDistance(string queryWord, string documentWord)
+        public static int LevenshteinDistance(string queryWord, string documentWord)// toma cada palabra de la query y la compara con cada palabra de los documentos y devuelve el numero menor de cambios posibles para que las palabras sean iguales
         {
             int cost = 0;
             int queryWordLength = queryWord.Length;

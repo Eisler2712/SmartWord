@@ -23,7 +23,7 @@ namespace MoogleEngine
 
         public Dictionary<string, int> CounterData;
 
-        private void CompleteMatrix()
+        private void CompleteMatrix()// completa la matriz de la forma (documeto,palabras)
         {
             System.Console.WriteLine($"CompleteMatrix  Files: {Files.Count} VocabularyLenght: {Vocabulary.Count}");
             for (int i = 0; i < Files.Count; i++)
@@ -44,7 +44,7 @@ namespace MoogleEngine
             }
             System.Console.WriteLine("End CompleteMatrix");
         }
-        private HashSet<string> AllWords()
+        private HashSet<string> AllWords()//Guardar todas las palabras de todos los documentos sin que estas se repitan
         {
             var allwords = new HashSet<string>();
             foreach (var document in Files)
@@ -57,7 +57,7 @@ namespace MoogleEngine
             System.Console.WriteLine($"Complete AllWords --- MyMatrix.cs ----- Lenght: {allwords.Count}");
             return allwords;
         }
-        private int Counter(string word, List<Document> docs)
+        private int Counter(string word, List<Document> docs)// Devuelve la cantidad  de palabras que contiene cada documento
         {
             int counter=0;
             foreach (var doc in docs)

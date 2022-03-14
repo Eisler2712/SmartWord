@@ -14,7 +14,7 @@ namespace MoogleEngine
             CompleteVector();
 
         }
-         private void CompleteVector()
+         private void CompleteVector()// Llenar una matriz de 1 fila por todas las palabras
        { 
            
                for (int j = 0; j < Vocabulary.Count; j++)
@@ -25,7 +25,7 @@ namespace MoogleEngine
                }
            
        }
-        public void MultiplicateVector(float count,MyMatrix myMatrix)
+        public void MultiplicateVector(float count,MyMatrix myMatrix)//Llenando la misma matriz con el peso
         {
                 for (int j = 0; j < Matrix.GetLength(1); j++)
                 {

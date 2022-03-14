@@ -16,6 +16,7 @@
 }
 
 <ul class="results">
+    <!-- Controlar si no existe la query en ninguno de los documentos-->
     @if(isProcess)
     {
        @if(result.Items().Count()==0 && query!="")

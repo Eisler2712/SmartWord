@@ -19,7 +19,7 @@ namespace MoogleEngine
             SetMaxFrequency();
             FillWeightByWord();
         }
-        public void Tokenize()
+        public void Tokenize()// Obtener todas las palabras de todos los documentos y su frecuencia
         {
             string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").
             Replace(".", " ").Replace(";", " ").Replace("!", " ").Replace("'", " ").Replace("`", " ").
@@ -28,7 +28,8 @@ namespace MoogleEngine
             var words = newContent.ToLower().Split(" ").Where(s => !string.IsNullOrEmpty(s));
 
             Dictionary<string, bool> @checked = new Dictionary<string, bool>();
-
+            
+            // Obtener la frecuencia de las palabras en cada documento
             foreach (var word in words)
             {
                 if (!conjuciones.Contains(word) && !preposiciones.Contains(word) && !pronombres.Contains(word))
@@ -55,12 +56,12 @@ namespace MoogleEngine
 
             }
         }
-        private void SetMaxFrequency()
+        private void SetMaxFrequency()// Extraer la mayor frecuencia en cada documento
         {
             var values = FrequencyByWords.Values;
             MaxFrequency = values.Max();
         }
-        private void FillWeightByWord()
+        private void FillWeightByWord()//completando el diccionario con los pesos de cada palabra en cada documento
         {
 
             foreach (var key in FrequencyByWords.Keys)
@@ -68,7 +69,7 @@ namespace MoogleEngine
                 WeightByWords.Add(key, FrequencyByWords[key] / MaxFrequency);
             }
         }
-        public string Snippet(string document)
+        public string Snippet(string document)// Obtener un segmento del documento 
         {
             int i = 0;
             string snippet = "";
