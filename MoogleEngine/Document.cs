@@ -24,7 +24,7 @@ namespace MoogleEngine
             string newContent = Content.Replace("\t", " ").Replace("\n", " ").Replace(",", " ").
             Replace(".", " ").Replace(";", " ").Replace("!", " ").Replace("'", " ").Replace("`", " ").
             Replace("“", (" ").Replace("”", " ").Replace("\"", " ").Replace(">"," ").Replace("<"," ").
-            Replace("_"," ").Replace("»","").Replace("»",""));
+            Replace("_"," ").Replace("»","").Replace("»","").Replace("—"," "));
             var words = newContent.ToLower().Split(" ").Where(s => !string.IsNullOrEmpty(s));
 
             Dictionary<string, bool> @checked = new Dictionary<string, bool>();
